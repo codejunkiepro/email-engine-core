@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const { connectDB, User } = require('./models');
 const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api');
+const webhookRoutes = require('./routes/webhook');
+
 
 const PORT = process.env.PORT || 4000;
 createIndices();
@@ -45,6 +47,7 @@ app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
+app.use('/webhook', webhookRoutes);
 
 app.get('/', async (req, res) => {
 	res.json({ message: 'ok', });

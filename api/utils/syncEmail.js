@@ -44,19 +44,7 @@ const syncEmails = async (userId, broadcast) => {
         const mailboxes = await fetchMailboxes(client);
 
         for (const email of emails) {
-            await indexEmailMessage(email.id, {
-                message_id: email.id,
-                user_id: userId,
-                subject: email.subject,
-                sender: email.from ? email.from.emailAddress.address : '',
-                senderName: email.from ? email.from.emailAddress.name : '',
-                recipient: email.toRecipients.map(r => r.emailAddress.address).join(', '),
-                body: email.body.content,
-                timestamp: email.receivedDateTime,
-                read: email.isRead,
-                folder: email.parentFolderId,
-                flag: email.flag ? email.flag.flagStatus : 'notFlagged',
-            })
+            
         }
 
         for (const mailbox of mailboxes) {
@@ -82,27 +70,9 @@ const syncEmails = async (userId, broadcast) => {
     }
 };
 
-const scheduleSyncJob = (userId, broadcast) => {
-    if (activeCronJobs[userId]) {
-        console.log(`Cron job for user ${userId} is already scheduled.`);
-        return;
-    }
-
-    // Schedule a cron job to run every hour
-    const cronJob = cron.schedule('*/15 * * * *', async () => {
-        console.log(`Running cron job for user ${userId}`);
-        await syncEmails(userId, broadcast);
-    });
-
-    // Save the cron job to the activeCronJobs object
-    activeCronJobs[userId] = cronJob;
-    console.log(`Cron job for user ${userId} scheduled.`);
-};
-
 // handle a sync request
 const handleSyncRequest = async (userId, broadcast) => {
     try {
-        scheduleSyncJob(userId, broadcast);
         await syncEmails(userId, broadcast);
     } catch (error) {
         throw error;

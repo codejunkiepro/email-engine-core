@@ -13,13 +13,16 @@ const columns = [
 
 const EmailsTable = ({ data }) => {
   // Transform data for display
+  const transformedData = data.map((item) => ({
+    ...item,
+    timestamp: moment(item.timestamp).format("YYYY-MM-DD HH:mm"),
+    read: item.read ? "Read" : "Unread",
+  }));
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
-      data: data.map((item) => ({
-        ...item,
-        timestamp: moment(item.timestamp).format("YYYY-MM-DD HH:mm"),
-      })),
+      data: transformedData
     });
 
   return (

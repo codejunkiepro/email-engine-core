@@ -13,7 +13,7 @@ const EmailList = () => {
         const fetchEmails = async () => {
             const localUserId = localStorage.getItem('userId');
             const ws = new WebSocket('ws://localhost:4000');
-            
+
             try {
                 // Fetch user data from the API
 
@@ -26,6 +26,7 @@ const EmailList = () => {
 
                 ws.onmessage = (event) => {
                     const message = JSON.parse(event.data);
+                    console.log(message, 'message')
                     if (message.userId === localUserId) {
                         switch (message.type) {
                             case 'emailUpdate':
@@ -52,7 +53,7 @@ const EmailList = () => {
                 console.error('Error fetching emails:', error);
                 setError(error.response ? error.response.data : error.message);
             }
-            
+
             return () => {
                 ws.close();
             };
@@ -68,7 +69,7 @@ const EmailList = () => {
             <h3>Emails</h3>
             {emails.length ? <EmailsTable data={emails} /> : ''}
             <h3>Mailboxes</h3>
-            {mailboxes.length ? <MailboxTable data={mailboxes} /> : ''}
+            {mailboxes.length ? <MailboxTable data={mailboxes.sort((a, b) => a.mailbox_name - b.mailbox_name)} /> : ''}
         </div>
     );
 };

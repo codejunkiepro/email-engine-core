@@ -18,6 +18,8 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
     "limiter": "^2.1.0",
     "mongoose": "^8.4.1",
     "mysql2": "^3.10.0",

@@ -10,7 +10,7 @@ const columns = [
 ];
 
 const MailboxTable = ({ data }) => {
-	// Transform data for display
+  // Transform data for display
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,

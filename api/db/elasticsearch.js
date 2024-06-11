@@ -121,7 +121,10 @@ async function getAllEmailMessage(userId) {
                     match_all: {
                         userId
                     } // Match all documents
-                }
+                },
+                sort: [
+                    { timestamp: { order: 'desc' } }
+                ]
             }
         });
 

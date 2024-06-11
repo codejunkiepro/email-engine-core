@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const { User } = require('../models');
+const { createSubscription } = require('../utils/createSubscription');
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.post('/register', async (req, res) => {
         if (!user) {
             user = await User.create({ userId });
         }
-        
+
         const params = new URLSearchParams({
             client_id: CLIENT_ID,
             response_type: 'code',
@@ -75,9 +76,13 @@ router.get('/oauth/callback', async (req, res) => {
 
         const userResponse = await axios.get(graphApiUrl, { headers: graphApiHeaders });
         const userDetails = userResponse.data;
-        console.log(userDetails)
+        console.log(userDetails);
+
+        const subscriptData = await createSubscription(access_token, userId);
+        console.log(subscriptData, "subscription");
 
         let user = await User.findOne({ userId });
+
 
         if (user) {
             user.outlookToken = access_token;
