@@ -10,14 +10,14 @@ const CLIENT_SECRET = process.env.OUTLOOK_CLIENT_SECRET;
 const REDIRECT_URI = process.env.OUTLOOK_REDIRECT_URI;
 const AUTHORIZATION_BASE_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
 const TOKEN_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
-console.log(REDIRECT_URI)
+
 // User registration
 router.post('/register', async (req, res) => {
     const { userId } = req.body;
 
     try {
         let user = await User.findOne({ userId: userId });
-        // console.log(user)
+        
         if (!user) {
             user = await User.create({ userId });
         }
@@ -76,11 +76,10 @@ router.get('/oauth/callback', async (req, res) => {
 
         const userResponse = await axios.get(graphApiUrl, { headers: graphApiHeaders });
         const userDetails = userResponse.data;
-        console.log(userDetails);
+        
 
         const subscriptData = await createSubscription(access_token, userId);
-        console.log(subscriptData, "subscription");
-
+        
         let user = await User.findOne({ userId });
 
 
