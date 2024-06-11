@@ -5,7 +5,6 @@ const dbHelper = require('../helpers/dbHelper');
 const { User } = require('../models');
 const { Client } = require("@microsoft/microsoft-graph-client");
 const { indexEmailMessage, indexMailboxes, getAllEmailMessage, getAllMailboxes } = require('../db/elasticsearch');
-// const ioServer = require('../helpers/socketHelper');
 
 const router = express.Router();
 
@@ -17,7 +16,6 @@ router.post('/', async function (req, res) {
         return;
     }
 
-    // console.log(JSON.stringify(req.body, null, 2));
     const broadcast = req.app.get('broadcast');
 
     let areTokensValid = true;
@@ -32,12 +30,11 @@ router.post('/', async function (req, res) {
 
         areTokensValid = validationResults.reduce((x, y) => x && y);
     }
-    // console.log(areTokensValid, "areTokensValid");
 
     if (areTokensValid) {
         for (let i = 0; i < req.body.value.length; i++) {
             const notification = req.body.value[i];
-            // console.log(notification.clientState, process.env.SUBSCRIPTION_CLIENT_STATE)
+    
             if (notification.clientState === process.env.OUTLOOK_CLIENT_SECRET) {
                 const subscription = await dbHelper.getSubscription(notification.subscriptionId);
                 console.log(subscription, "subscription")
